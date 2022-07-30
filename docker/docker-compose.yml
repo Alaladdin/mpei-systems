@@ -1,0 +1,101 @@
+version: "3.8"
+
+services:
+  api:
+    build: github.com/Alaladdin/mpei-server#main
+    image: api
+    container_name: api
+    depends_on:
+      - redis
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 15s
+    ports:
+      - "127.0.0.1:${API_PORT}:${API_PORT}"
+    env_file:
+      - ${PATH_TO_PROJECTS}\mpei-server\.env
+    expose:
+      - ${API_PORT}
+    environment:
+      - HOST=0.0.0.0
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${API_PORT}
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASS=${REDIS_PASS}
+
+  admin:
+    build: github.com/Alaladdin/agrabah-admin#main
+    image: admin
+    container_name: admin
+    depends_on:
+      - api
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 15s
+    ports:
+      - "127.0.0.1:${ADMIN_PORT}:${ADMIN_PORT}"
+    expose:
+      - ${ADMIN_PORT}
+    env_file:
+      - ${PATH_TO_PROJECTS}\agrabah-admin\.env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - API_URL=http://api:${API_PORT}
+
+  telegram-bot:
+    build: github.com/Alaladdin/mpei-telegram#main
+    image: telegram-bot
+    container_name: telegram-bot
+    depends_on:
+      - api
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 15s
+    env_file:
+      - ${PATH_TO_PROJECTS}\mpei-telegram\.env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - API_URL=http://api:${API_PORT}
+
+  vk-bot:
+    build: github.com/Alaladdin/mpei-vk#main
+    image: vk-bot
+    container_name: vk-bot
+    depends_on:
+      - api
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 15s
+    env_file:
+      - ${PATH_TO_PROJECTS}\mpei-vk\.env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - API_URL=http://api:${API_PORT}
+
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    command: redis-server --port ${REDIS_PORT} --requirepass ${REDIS_PASS}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 15s
+    ports:
+      - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
+    expose:
+      - ${REDIS_PORT}
