@@ -2,7 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   port          : process.env.PORT || 9001,
-  host          : process.env.HOST || '127.0.0.1',
+  host          : process.env.HOST || '0.0.0.0',
   githubWebhooks: {
     sigHeaderName   : 'X-Hub-Signature-256',
     sigHashAlgorithm: 'sha256',

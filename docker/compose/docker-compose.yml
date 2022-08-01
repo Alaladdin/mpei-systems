@@ -1,5 +1,5 @@
 version: "3.8"
-
+name: "mpei-systems"
 services:
   api:
     build: github.com/Alaladdin/mpei-server#main
@@ -20,7 +20,6 @@ services:
     expose:
       - ${API_PORT}
     environment:
-      - HOST=0.0.0.0
       - NODE_ENV=${NODE_ENV}
       - PORT=${API_PORT}
       - REDIS_HOST=redis
