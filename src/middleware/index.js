@@ -3,23 +3,21 @@ const { sigHeaderName, sigHashAlgorithm, secrets } = require('../../config').git
 
 module.exports.webhookMiddleware = async (ctx, next) => {
   const { request } = ctx;
-  let isSignaturesEqual = false;
-
-  secrets.forEach((secret) => {
-    if (isSignaturesEqual) return false;
-
+  const isSignaturesEqual = secrets.some((secret) => {
     const signature = request.get(sigHeaderName);
 
     if (signature) {
       const hmac = crypto.createHmac(sigHashAlgorithm, secret);
       const expectedSignature = `${sigHashAlgorithm}=${hmac.update(JSON.stringify(request.body)).digest('hex')}`;
 
-      isSignaturesEqual = signature === expectedSignature;
+      return signature === expectedSignature;
     }
+
+    return false;
   });
 
   if (!isSignaturesEqual)
-    ctx.throw(401);
+    ctx.throw(400);
 
   await next();
 };

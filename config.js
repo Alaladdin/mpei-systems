@@ -11,6 +11,6 @@ module.exports = {
       process.env.AGRABAH_WEBHOOK_SECRET,
       process.env.TELEGRAM_BOT_WEBHOOK_SECRET,
       process.env.VK_BOT_WEBHOOK_SECRET,
-    ],
+    ].filter((secret) => secret),
   },
 };

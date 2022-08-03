@@ -1,0 +1,7 @@
+.idea
+node_modules
+docker
+Dockerfile
+.env
+.eslintrc.js
+.gitignore

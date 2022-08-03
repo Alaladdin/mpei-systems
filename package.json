@@ -7,7 +7,9 @@
     "dev": "nodemon app.js",
 
     "docker:build": "docker build -t mpei-webhook .",
-    "docker:run": "docker run -d -p 9001:9001 --name mpei-webhook --network=mpei-systems_default mpei-webhook"
+    "docker:run": "docker run -d -p 9001:9001 --name mpei-webhook --env-file .env -v %cd%/docker:/usr/src/app/docker mpei-webhook",
+    "docker:clean": "docker container rm mpei-webhook --volumes -f && docker image rm mpei-webhook -f",
+    "docker:recreate": "npm run docker:clean && npm run docker:build && npm run docker:run"
   },
   "repository": {
     "type": "git",
@@ -24,8 +26,7 @@
     "dotenv": "^16.0.1",
     "koa": "^2.13.4",
     "koa-body-parser": "^1.1.2",
-    "koa-helmet": "^6.1.0",
-    "koa-router": "^12.0.0"
+    "koa-helmet": "^6.1.0"
   },
   "devDependencies": {
     "eslint": "^8.20.0",
