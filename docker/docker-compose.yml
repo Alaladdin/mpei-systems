@@ -16,7 +16,7 @@ services:
     ports:
       - "127.0.0.1:${API_PORT}:${API_PORT}"
     env_file:
-      - ${PATH_TO_PROJECTS}\mpei-server\.env
+      - ./.env.api
     expose:
       - ${API_PORT}
     environment:
@@ -43,7 +43,7 @@ services:
     expose:
       - ${ADMIN_PORT}
     env_file:
-      - ${PATH_TO_PROJECTS}\agrabah-admin\.env
+      - ./.env.admin
     environment:
       - NODE_ENV=${NODE_ENV}
       - API_URL=http://api:${API_PORT}
@@ -61,7 +61,7 @@ services:
         max_attempts: 5
         window: 15s
     env_file:
-      - ${PATH_TO_PROJECTS}\mpei-telegram\.env
+      - ./.env.telegram
     environment:
       - NODE_ENV=${NODE_ENV}
       - API_URL=http://api:${API_PORT}
@@ -79,7 +79,7 @@ services:
         max_attempts: 5
         window: 15s
     env_file:
-      - ${PATH_TO_PROJECTS}\mpei-vk\.env
+      - ./.env.vk
     environment:
       - NODE_ENV=${NODE_ENV}
       - API_URL=http://api:${API_PORT}
