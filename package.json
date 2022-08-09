@@ -1,6 +1,6 @@
 {
   "name": "mpei-systems",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/Alaladdin/mpei-systems.git"
   },
-  "keywords": ["docker"],
+  "keywords": ["docker", "koa"],
   "author": "Alaladdin",
   "license": "ISC",
   "bugs": {
@@ -29,7 +29,7 @@
     "koa-helmet": "^6.1.0"
   },
   "devDependencies": {
-    "eslint": "^8.20.0",
+    "eslint": "^8.21.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
     "nodemon": "^2.0.19"

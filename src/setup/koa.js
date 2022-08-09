@@ -17,7 +17,7 @@ app.on('repository-updated', async () => {
   const restartDirPath = path.resolve(__dirname, '../../docker');
   const restartFilePath = path.resolve(restartDirPath, 'restart-docker-compose.sh');
 
-  exec(restartFilePath, { cwd: restartDirPath })
+  exec(`bash "${restartFilePath}"`, { cwd: restartDirPath })
     .then(() => {
       const now = new Date().toLocaleString('ru', { timeZone: 'Europe/Moscow' });
 

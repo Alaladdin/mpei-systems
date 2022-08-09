@@ -1,4 +1,3 @@
-docker compose down --volumes;
-docker rmi $(docker images -a -q) -f;
+docker compose down --rmi all --volumes;
 docker compose up -d;
-sleep 10;
+# sleep 10;
