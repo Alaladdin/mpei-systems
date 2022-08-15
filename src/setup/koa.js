@@ -5,6 +5,7 @@ const helmet = require('koa-helmet');
 const bodyParser = require('koa-body-parser');
 const path = require('path');
 const { webhookMiddleware } = require('../middleware');
+const { log } = require('../helpers');
 
 const app = new Koa();
 const exec = util.promisify(childProcess.exec);
@@ -14,17 +15,17 @@ app.use(bodyParser());
 app.use(webhookMiddleware);
 
 app.on('repository-updated', async () => {
+  log('REPO UPDATE STARTED');
+
   const restartDirPath = path.resolve(__dirname, '../../docker');
   const restartFilePath = path.resolve(restartDirPath, 'restart-docker-compose.sh');
 
   exec(`bash "${restartFilePath}"`, { cwd: restartDirPath })
     .then(() => {
-      const now = new Date().toLocaleString('ru', { timeZone: 'Europe/Moscow' });
-
-      console.info('[REPO UPDATED]:', now);
+      log('REPO UPDATED');
     })
     .catch((err) => {
-      console.error('[REPO UPDATE ERROR]:', err);
+      log(`REPO UPDATE ERROR${err}`);
     });
 });
 
@@ -36,7 +37,7 @@ app.use(async (ctx, next) => {
 });
 
 app.on('error', (err) => {
-  console.error('[SERVER ERROR]', err);
+  log('SERVER ERROR', err);
 });
 
 module.exports = app;

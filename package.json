@@ -1,11 +1,10 @@
 {
   "name": "mpei-systems",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-
     "docker:build": "docker build -t mpei-webhook .",
     "docker:run": "docker run -d -p 9001:9001 --name mpei-webhook --env-file .env -v %cd%/docker:/usr/src/app/docker mpei-webhook",
     "docker:clean": "docker container rm mpei-webhook --volumes -f && docker image rm mpei-webhook -f",
@@ -15,7 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/Alaladdin/mpei-systems.git"
   },
-  "keywords": ["docker", "koa"],
+  "keywords": [
+    "docker",
+    "koa"
+  ],
   "author": "Alaladdin",
   "license": "ISC",
   "bugs": {
@@ -23,6 +25,7 @@
   },
   "homepage": "https://github.com/Alaladdin/mpei-systems#readme",
   "dependencies": {
+    "chalk": "^4.1.2",
     "dotenv": "^16.0.1",
     "koa": "^2.13.4",
     "koa-body-parser": "^1.1.2",
