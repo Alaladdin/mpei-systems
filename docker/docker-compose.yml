@@ -54,7 +54,6 @@ services:
     container_name: telegram-bot
     depends_on:
       - api
-      - telegram-webapp
     deploy:
       restart_policy:
         condition: on-failure
@@ -66,24 +65,6 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV}
       - API_URL=http://api:${API_PORT}
-
-  telegram-webapp:
-    build: github.com/Alaladdin/mpei-telegram-web-app#main
-    image: telegram-webapp
-    container_name: telegram-webapp
-    depends_on:
-      - api
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 15s
-    env_file:
-      - ./.env.telegram-webapp
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - VITE_API_ADDRESS=http://api:${API_PORT}
 
   vk-bot:
     build: github.com/Alaladdin/mpei-vk#main
