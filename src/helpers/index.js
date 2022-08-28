@@ -2,9 +2,9 @@ const chalk = require('chalk');
 
 const getCurrentDate = () => new Date().toLocaleString('ru', { timeZone: 'Europe/Moscow' });
 
-module.exports.log = (text, type = 'info') => {
-  const title = chalk.bold.magenta(`[${text.toUpperCase()}]:`);
-  const value = chalk.cyan(getCurrentDate());
+module.exports.log = (title, value) => {
+  const titleFormatted = chalk.bold.magenta(`[${title.toUpperCase()}]:`);
+  const valueFormatted = chalk.cyan(value || getCurrentDate());
 
-  console[type](chalk.bold.bgGray(`${title} ${value}`));
+  console.info(chalk.bold.bgGray(`${titleFormatted} ${valueFormatted}`));
 };

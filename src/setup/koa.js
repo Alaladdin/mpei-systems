@@ -25,7 +25,7 @@ app.on('repository-updated', async () => {
       log('REPO UPDATED');
     })
     .catch((err) => {
-      log(`REPO UPDATE ERROR${err}`);
+      log('REPO UPDATE ERROR', err);
     });
 });
 
