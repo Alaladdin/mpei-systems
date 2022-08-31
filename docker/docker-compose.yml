@@ -47,6 +47,7 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV}
       - API_URL=http://api:${API_PORT}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
 
   telegram-bot:
     build: github.com/Alaladdin/mpei-telegram#main
