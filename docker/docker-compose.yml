@@ -84,6 +84,31 @@ services:
       - NODE_ENV=${NODE_ENV}
       - API_URL=http://api:${API_PORT}
 
+  url-shortener:
+    build: github.com/Alaladdin/url-shortener#main
+    image: url-shortener
+    container_name: url-shortener
+    depends_on:
+      - redis
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 15s
+    ports:
+      - "127.0.0.1:${SHORTENER_PORT}:${SHORTENER_PORT}"
+    expose:
+      - ${SHORTENER_PORT}
+    env_file:
+      - ./.env.shortener
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${SHORTENER_PORT}
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASS=${REDIS_PASS}
+
   redis:
     image: "redis:alpine"
     container_name: redis
