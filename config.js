@@ -1,8 +1,12 @@
 require('dotenv').config();
 
 module.exports = {
-  port          : process.env.PORT || 9001,
-  host          : process.env.HOST || '0.0.0.0',
+  port       : process.env.PORT || 9001,
+  host       : process.env.HOST || '0.0.0.0',
+  telegramBot: {
+    token      : process.env.BOT_TOKEN,
+    adminChatId: process.env.ADMIN_CHAT_ID,
+  },
   githubWebhooks: {
     sigHeaderName   : 'X-Hub-Signature-256',
     sigHashAlgorithm: 'sha256',

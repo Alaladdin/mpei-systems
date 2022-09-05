@@ -6,6 +6,7 @@ const bodyParser = require('koa-body-parser');
 const path = require('path');
 const { webhookMiddleware } = require('../middleware');
 const { log } = require('../helpers');
+const bot = require('./telegramBot');
 
 const app = new Koa();
 const exec = util.promisify(childProcess.exec);
@@ -23,9 +24,11 @@ app.on('repository-updated', async () => {
   exec(`bash "${restartFilePath}"`, { cwd: restartDirPath })
     .then(() => {
       log('REPO UPDATED');
+      bot.sendMessage('REPO UPDATED');
     })
     .catch((err) => {
       log('REPO UPDATE ERROR', err);
+      bot.sendMessage('REPO UPDATE ERROR');
     });
 });
 
