@@ -4,6 +4,7 @@ const childProcess = require('node:child_process');
 const helmet = require('koa-helmet');
 const bodyParser = require('koa-body-parser');
 const path = require('path');
+const moment = require('moment');
 const { webhookMiddleware } = require('../middleware');
 const { log } = require('../helpers');
 
@@ -17,12 +18,16 @@ app.use(webhookMiddleware);
 app.on('repository-updated', async () => {
   log('REPO UPDATE STARTED');
 
+  const updateStart = moment();
   const restartDirPath = path.resolve(__dirname, '../../docker');
   const restartFilePath = path.resolve(restartDirPath, 'restart-docker-compose.sh');
 
   exec(`bash "${restartFilePath}"`, { cwd: restartDirPath })
     .then(() => {
-      log('REPOS REBUILDED', null, true);
+      const buildDuration = moment.duration(moment() - updateStart).asMinutes();
+      const buildDurationText = `${buildDuration.toFixed(2)} min`;
+
+      log('REPOS REBUILDED', buildDurationText);
     })
     .catch((err) => {
       log('REPOS REBUILD ERROR', err, true);
@@ -37,7 +42,7 @@ app.use(async (ctx, next) => {
 });
 
 app.on('error', (err) => {
-  log('SERVER ERROR', err);
+  log('SERVER ERROR', err, false);
 });
 
 module.exports = app;
