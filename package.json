@@ -1,14 +1,10 @@
 {
   "name": "mpei-systems",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "docker:build": "docker build -t mpei-webhook .",
-    "docker:run": "docker run -d -p 9001:9001 --name mpei-webhook --env-file .env -v %cd%/docker:/usr/src/app/docker mpei-webhook",
-    "docker:clean": "docker container rm mpei-webhook --volumes -f && docker image rm mpei-webhook -f",
-    "docker:recreate": "npm run docker:clean && npm run docker:build && npm run docker:run"
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",

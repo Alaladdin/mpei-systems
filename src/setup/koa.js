@@ -35,7 +35,11 @@ app.on('repository-updated', async () => {
 });
 
 app.use(async (ctx, next) => {
-  ctx.app.emit('repository-updated');
+  const commitMessage = JSON.parse(ctx.request.body?.payload)?.head_commit?.message;
+
+  if (!commitMessage.includes('[skip-build]'))
+    ctx.app.emit('repository-updated');
+
   ctx.body = { result: true };
 
   await next();
