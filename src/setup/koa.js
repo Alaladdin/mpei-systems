@@ -2,7 +2,7 @@ const Koa = require('koa');
 const util = require('node:util');
 const childProcess = require('node:child_process');
 const helmet = require('koa-helmet');
-const bodyParser = require('koa-body-parser');
+const bodyParser = require('koa-bodyparser');
 const path = require('path');
 const moment = require('moment');
 const { webhookMiddleware } = require('../middleware');
@@ -35,12 +35,10 @@ app.on('repository-updated', async () => {
 });
 
 app.use(async (ctx, next) => {
-  const commitMessage = JSON.parse(ctx.request.body?.payload)?.head_commit?.message;
+  const commitMessage = ctx.request.body.head_commit.message;
 
-  log('commitMessage', commitMessage);
-
-  // if (!commitMessage.includes('[skip-build]'))
-  //   ctx.app.emit('repository-updated');
+  if (!commitMessage.includes('[skip-build]'))
+    ctx.app.emit('repository-updated');
 
   ctx.body = { result: true };
 
@@ -48,7 +46,7 @@ app.use(async (ctx, next) => {
 });
 
 app.on('error', (err) => {
-  log('SERVER ERROR', err, false);
+  log('SERVER ERROR', err);
 });
 
 module.exports = app;

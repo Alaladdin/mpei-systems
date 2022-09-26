@@ -24,7 +24,7 @@
     "chalk": "^4.1.2",
     "dotenv": "^16.0.1",
     "koa": "^2.13.4",
-    "koa-body-parser": "^1.1.2",
+    "koa-bodyparser": "^4.3.0",
     "koa-helmet": "^6.1.0",
     "moment": "^2.29.4",
     "telegraf": "^4.9.1"
