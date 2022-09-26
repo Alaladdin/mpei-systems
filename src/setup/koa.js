@@ -39,8 +39,8 @@ app.use(async (ctx, next) => {
 
   log('commitMessage', commitMessage);
 
-  if (!commitMessage.includes('[skip-build]'))
-    ctx.app.emit('repository-updated');
+  // if (!commitMessage.includes('[skip-build]'))
+  //   ctx.app.emit('repository-updated');
 
   ctx.body = { result: true };
 
