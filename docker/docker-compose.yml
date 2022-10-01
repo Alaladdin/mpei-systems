@@ -5,14 +5,9 @@ services:
     build: github.com/Alaladdin/mpei-server#main
     image: api
     container_name: api
+    restart: always
     depends_on:
       - redis
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 15s
     ports:
       - "127.0.0.1:${API_PORT}:${API_PORT}"
     env_file:
@@ -30,14 +25,9 @@ services:
     build: github.com/Alaladdin/agrabah-admin#main
     image: admin
     container_name: admin
+    restart: always
     depends_on:
       - api
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 15s
     ports:
       - "127.0.0.1:${ADMIN_PORT}:${ADMIN_PORT}"
     expose:
@@ -52,14 +42,9 @@ services:
     build: github.com/Alaladdin/mpei-telegram#main
     image: telegram-bot
     container_name: telegram-bot
+    restart: always
     depends_on:
       - api
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 15s
     env_file:
       - ./.env.telegram
     environment:
@@ -70,14 +55,9 @@ services:
     build: github.com/Alaladdin/mpei-vk#main
     image: vk-bot
     container_name: vk-bot
+    restart: always
     depends_on:
       - api
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 15s
     env_file:
       - ./.env.vk
     environment:
@@ -88,14 +68,9 @@ services:
     build: github.com/Alaladdin/url-shortener#main
     image: url-shortener
     container_name: url-shortener
+    restart: always
     depends_on:
       - redis
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 15s
     ports:
       - "127.0.0.1:${SHORTENER_PORT}:${SHORTENER_PORT}"
     expose:
@@ -113,12 +88,7 @@ services:
     image: "redis:alpine"
     container_name: redis
     command: redis-server --port ${REDIS_PORT} --requirepass ${REDIS_PASS}
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 15s
+    restart: always
     ports:
       - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
     expose:
