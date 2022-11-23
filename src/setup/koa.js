@@ -10,28 +10,38 @@ const { log } = require('../helpers');
 
 const app = new Koa();
 const exec = util.promisify(childProcess.exec);
+let isUpdating = false;
 
 app.use(helmet({ frameguard: { action: 'deny' } }));
 app.use(bodyParser());
 app.use(webhookMiddleware);
 
 app.on('repository-updated', async () => {
-  log('REPO UPDATE STARTED');
+  if (isUpdating) {
+    log('CONTAINERS UPDATING ALREADY');
+  } else {
+    isUpdating = true;
 
-  const updateStart = moment();
-  const restartDirPath = path.resolve(__dirname, '../../docker');
-  const restartFilePath = path.resolve(restartDirPath, 'restart-docker-compose.sh');
+    log('CONTAINERS UPDATE STARTED');
 
-  exec(`bash "${restartFilePath}"`, { cwd: restartDirPath })
-    .then(() => {
-      const buildDuration = moment.duration(moment() - updateStart).asMinutes();
-      const buildDurationText = `${buildDuration.toFixed(2)} min`;
+    const updateStart = moment();
+    const restartDirPath = path.resolve(__dirname, '../../docker');
+    const restartFilePath = path.resolve(restartDirPath, 'restart-docker-compose.sh');
 
-      log('REPOS REBUILDED', buildDurationText);
-    })
-    .catch((err) => {
-      log('REPOS REBUILD ERROR', err, true);
-    });
+    exec(`bash "${restartFilePath}"`, { cwd: restartDirPath })
+      .then(() => {
+        const buildDuration = moment.duration(moment() - updateStart).asMinutes();
+        const buildDurationText = `${buildDuration.toFixed(2)} min`;
+
+        log('CONTAINERS UPDATED', buildDurationText);
+      })
+      .catch((err) => {
+        log('CONTAINERS UPDATE ERROR', err.message, true);
+      })
+      .finally(() => {
+        isUpdating = false;
+      });
+  }
 });
 
 app.use(async (ctx, next) => {
@@ -46,7 +56,7 @@ app.use(async (ctx, next) => {
 });
 
 app.on('error', (err) => {
-  log('SERVER ERROR', err);
+  log('ERROR', err.message || 'unknown error', true);
 });
 
 module.exports = app;
