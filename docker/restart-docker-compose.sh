@@ -1,3 +1,2 @@
 docker compose down --rmi all --volumes;
 docker compose up -d;
-# sleep 10;
